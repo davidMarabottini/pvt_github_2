@@ -24,26 +24,21 @@ jobs:
       - name: Download Apache FOP Binary
         run: |
           FOP_VERSION="2.9"
-          FOP_NAME="fop-${FOP_VERSION}"
-          ARCHIVE_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz"
+          ARCHIVE_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-${FOP_VERSION}-bin.tar.gz"
 
-          echo "Downloading FOP from: $ARCHIVE_URL"
           wget $ARCHIVE_URL
+          tar xvfz fop-${FOP_VERSION}-bin.tar.gz
+          mv fop-${FOP_VERSION} fop
 
-          # Estrai i file
-          tar xvfz ${FOP_NAME}-bin.tar.gz
-          mv ${FOP_NAME} fop
-          echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
-
-          # Debug: verifica struttura FOP
-          echo "Listing FOP root:"
-          ls -l fop
-          echo "Listing FOP internal directory:"
-          ls -l fop/fop
-          echo "Listing FOP lib directory:"
-          ls -l fop/fop/lib
 
       # 4. Genera il PDF con FOP
+      - name: Debug FOP structure
+        run: |
+          echo "FOP_HOME = $FOP_HOME"
+          ls -l $FOP_HOME
+          ls -l $FOP_HOME/fop
+          ls -l $FOP_HOME/fop/lib
+    
       - name: Generate CV PDF
         run: |
           chmod +x $FOP_HOME/fop/fop
