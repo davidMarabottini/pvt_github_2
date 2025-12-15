@@ -47,9 +47,9 @@ jobs:
           
       - name: Generate CV PDF
         run: |
-          chmod +x $(pwd)/fop/fop/fop
+          chmod +x $FOP_HOME/fop/fop
 
-          $(pwd)/fop/fop/fop \
+          $FOP_HOME/fop/fop \
             -c ${GITHUB_WORKSPACE}/fop.xconf \
             -xml ${GITHUB_WORKSPACE}/dummy.xml \
             -xsl ${GITHUB_WORKSPACE}/onepagecv.xsl \
