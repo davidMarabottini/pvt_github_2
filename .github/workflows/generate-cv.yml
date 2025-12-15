@@ -24,7 +24,7 @@ jobs:
           wget https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-${FOP_VERSION}-bin.tar.gz
           tar xvf fop-${FOP_VERSION}-bin.tar.gz
           mv fop-${FOP_VERSION} fop
-          ls $(pwd)/fop/fop/fop
+          ls $(pwd)/fop/fop
           echo "FOP_HOME=$(pwd)/fop/fop/fop" >> $GITHUB_ENV   # NOTA: punta direttamente allo script interno
 
       - name: Debug FOP structure
