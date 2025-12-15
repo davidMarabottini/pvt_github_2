@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir -p artifact
 
-          java -cp "$FOP_HOME/lib/*" org.apache.fop.cli.Main \
+          java -cp $FOP_HOME/lib/* org.apache.fop.cli.Main \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf artifact/Curriculum_Vitae.pdf \
