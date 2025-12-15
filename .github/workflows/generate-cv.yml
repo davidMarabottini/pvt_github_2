@@ -40,13 +40,13 @@ jobs:
       # 4. Esecuzione di FOP (Generazione del PDF)
       - name: Generate CV PDF
         run: |
-          mkdir -p artifact # Crea la cartella temporanea
+          # mkdir -p artifact # Crea la cartella temporanea
           
           # *** NUOVO COMANDO: Esegui lo script FOP (che gestisce il classpath internamente) ***
           ${FOP_HOME}/fop \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
-            -pdf artifact/Curriculum_Vitae.pdf \
+            -pdf ./david_marabottini_expanded/it/cv_david_one_page.pdf \
             -param lang it \
             -param root_folder david_marabottini_expanded
             
