@@ -24,17 +24,15 @@ jobs:
       - name: Download Apache FOP from Archive
         run: |
           FOP_VERSION="2.9"
-          FOP_NAME="fop-${FOP_VERSION}"
-          # *** MODIFICA QUI IL PERCORSO DI DOWNLOAD VERSO L'ARCHIVIO STORICO ***
+          FOP_NAME="apache-fop-${FOP_VERSION}" # <-- DEVE ESSERE INCLUSO "apache-"
           ARCHIVE_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz"
           
           echo "Attempting to download FOP from: $ARCHIVE_URL"
           wget $ARCHIVE_URL
           
-          # Estrai i file
           tar xvfz ${FOP_NAME}-bin.tar.gz
-          # Rinomina e imposta FOP_HOME per gli step successivi
-          mv ${FOP_NAME} fop
+          # Rinominare la cartella estratta (apache-fop-2.9) in 'fop'
+          mv ${FOP_NAME} fop 
           echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
 
       # 4. Esecuzione di FOP (Generazione del PDF)
@@ -42,15 +40,14 @@ jobs:
         run: |
           mkdir -p artifact # Crea la cartella temporanea
           
-          # *** NUOVO COMANDO: Esegui lo script FOP (che gestisce il classpath internamente) ***
-          ${FOP_HOME}/fop \
+          # Esecuzione diretta del JAR principale di FOP (questo è il modo più pulito)
+          # NOTA: Qui ipotizziamo che il file fop.jar sia nella root di fop, il che è vero nella versione binaria
+          java -jar "${FOP_HOME}/fop.jar" \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf artifact/Curriculum_Vitae.pdf \
             -param lang it \
             -param root_folder david_marabottini_expanded
-            
-          # NOTA: Assicurati di aver corretto l'output in artifact/Curriculum_Vitae.pdf
         shell: bash
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
