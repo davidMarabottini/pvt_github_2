@@ -41,11 +41,15 @@ jobs:
       - name: Generate CV PDF
         run: |
           mkdir -p artifact
+          chmod +x $FOP_HOME/fop/fop
 
-          $FOP_HOME/fop \
+          $FOP_HOME/fop/fop \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
-            -pdf artifact/Curriculum_Vitae.pdf
+            -pdf artifact/Curriculum_Vitae.pdf \
+            -param lang "it" \
+            -param root_folder "david_marabottini_expanded" \
+
 
             
       # 5. Push al repository di destinazione
