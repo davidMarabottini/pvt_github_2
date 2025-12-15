@@ -40,21 +40,17 @@ jobs:
       # 4. Esecuzione di FOP (Generazione del PDF)
       - name: Generate CV PDF
         run: |
-          # mkdir -p artifact # Crea la cartella temporanea
-          
-          # *** NUOVO COMANDO: Esegui lo script FOP (che gestisce il classpath internamente) ***
-          ${FOP_HOME}/fop \
-            -c fop.xconf \
-            -xml dummy.xml \
-            -xsl onepagecv.xsl \
-            -pdf ./david_marabottini_expanded/it/cv_david_one_page.pdf \
+          chmod +x ${FOP_HOME}/fop/fop
+
+          ${FOP_HOME}/fop/fop \
+            -c ${GITHUB_WORKSPACE}/fop.xconf \
+            -xml ${GITHUB_WORKSPACE}/dummy.xml \
+            -xsl ${GITHUB_WORKSPACE}/onepagecv.xsl \
+            -pdf ${GITHUB_WORKSPACE}/david_marabottini_expanded/it/cv_david_one_page.pdf \
             -param lang it \
             -param root_folder david_marabottini_expanded
-            
-          # NOTA: Assicurati di aver corretto l'output in artifact/Curriculum_Vitae.pdf
         shell: bash
-        env:
-          FOP_HOME: ${{ env.FOP_HOME }}
+
 
       # 5. Push al repository di destinazione
       - name: Push CV PDF to External Repository
