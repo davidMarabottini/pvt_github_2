@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Source Repo
         uses: actions/checkout@v4
 
-      # 2. Setup Java 17 (necessario per FOP)
+      # 2. Setup Java 17
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
@@ -30,20 +30,24 @@ jobs:
           tar xvfz fop-${FOP_VERSION}-bin.tar.gz
           mv fop-${FOP_VERSION} fop
 
+          # Imposta FOP_HOME correttamente
+          echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
 
-      # 4. Genera il PDF con FOP
+      # 4. Debug della struttura FOP
       - name: Debug FOP structure
         run: |
           echo "FOP_HOME = $FOP_HOME"
           ls -l $FOP_HOME
           ls -l $FOP_HOME/fop
           ls -l $FOP_HOME/fop/lib
-    
+        env:
+          FOP_HOME: ${{ env.FOP_HOME }}
+
+      # 5. Genera il PDF con FOP
       - name: Generate CV PDF
         run: |
           chmod +x $FOP_HOME/fop/fop
 
-          # Esegui lo script FOP
           $FOP_HOME/fop/fop \
             -c ${GITHUB_WORKSPACE}/fop.xconf \
             -xml ${GITHUB_WORKSPACE}/dummy.xml \
@@ -55,7 +59,7 @@ jobs:
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
 
-      # 5. Copia e push del PDF generato su repository esterno
+      # 6. Copia e push del PDF generato su repository esterno
       - name: Push CV PDF to External Repository
         uses: dmnemec/copy_file_to_another_repo_action@main 
         env:
