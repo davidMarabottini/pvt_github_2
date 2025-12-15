@@ -20,7 +20,7 @@ jobs:
 
       - name: Download Apache FOP Binary
         run: |
-          FOP_VERSION="2.9"
+          FOP_VERSION="2.7"
           wget https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-${FOP_VERSION}-bin.tar.gz
           tar xvf fop-${FOP_VERSION}-bin.tar.gz
           mv fop-${FOP_VERSION} fop
