@@ -47,6 +47,7 @@ jobs:
           
       - name: Generate CV PDF
         run: |
+          ls $(pwd)
           chmod +x $(pwd)/fop/fop
 
           $(pwd)/fop/fop \
