@@ -39,17 +39,17 @@ jobs:
           ls $(pwd)/fop
 
       # 4. Esecuzione di FOP (Generazione del PDF)
-      - name: Debug FOP installation
-        run: |
-          echo "FOP_HOME = $(pwd)"
-          ls -l $FOP_HOME/lib
-          ls -l $FOP_HOME/fop
+      # - name: Debug FOP installation
+      #   run: |
+      #     echo "FOP_HOME = $(pwd)"
+      #     ls -l $FOP_HOME/lib
+      #     ls -l $FOP_HOME/fop
           
       - name: Generate CV PDF
         run: |
-          chmod +x ${FOP_HOME}/fop/fop
+          chmod +x $(pwd)/fop/fop
 
-          ${FOP_HOME}/fop/fop \
+          $(pwd)/fop/fop \
             -c ${GITHUB_WORKSPACE}/fop.xconf \
             -xml ${GITHUB_WORKSPACE}/dummy.xml \
             -xsl ${GITHUB_WORKSPACE}/onepagecv.xsl \
