@@ -23,7 +23,7 @@ jobs:
       # 3. Scarica Apache FOP
       - name: Download Apache FOP
         run: |
-          FOP_VERSION="2.9"
+          FOP_VERSION="2.18"
           FOP_NAME="apache-fop-${FOP_VERSION}"
           # Scarica l'archivio .tar.gz
           wget https://dlcdn.apache.org/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz
