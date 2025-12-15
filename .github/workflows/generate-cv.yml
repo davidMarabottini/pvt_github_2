@@ -56,7 +56,6 @@ jobs:
             -pdf ${GITHUB_WORKSPACE}/david_marabottini_expanded/it/cv_david_one_page.pdf \
             -param lang it \
             -param root_folder david_marabottini_expanded
-
         shell: bash
 
 
