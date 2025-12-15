@@ -13,53 +13,89 @@ jobs:
       - name: Checkout Source Repo
         uses: actions/checkout@v4
         
-      # 2. Setup Java: Installa Java (necessario per FOP)
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      # # 2. Setup Java: Installa Java (necessario per FOP)
+      # - name: Setup Java 17
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     distribution: 'temurin'
+      #     java-version: '17'
 
-      # 3. Scarica Apache FOP
-      # 3. Scarica Apache FOP
-      - name: Download Apache FOP from Archive
-        run: |
-          FOP_VERSION="2.9"
-          FOP_NAME="apache-fop-${FOP_VERSION}"
-          # *** MODIFICA QUI IL PERCORSO DI DOWNLOAD VERSO L'ARCHIVIO STORICO ***
-          ARCHIVE_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz"
-          
-          echo "Attempting to download FOP from: $ARCHIVE_URL"
-          wget $ARCHIVE_URL
-          
-          # Estrai i file
-          tar xvfz ${FOP_NAME}-bin.tar.gz
-          # Rinomina e imposta FOP_HOME per gli step successivi
-          mv ${FOP_NAME} fop
-          echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
-      # - name: Download Apache FOP
+      # # 3. Scarica Apache FOP
+      # # 3. Scarica Apache FOP
+      # - name: Download Apache FOP from Archive
       #   run: |
-      #     FOP_VERSION="2.18"
+      #     FOP_VERSION="2.9"
       #     FOP_NAME="apache-fop-${FOP_VERSION}"
-      #     # Scarica l'archivio .tar.gz
-      #     wget https://dlcdn.apache.org/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz
+      #     # *** MODIFICA QUI IL PERCORSO DI DOWNLOAD VERSO L'ARCHIVIO STORICO ***
+      #     ARCHIVE_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz"
+          
+      #     echo "Attempting to download FOP from: $ARCHIVE_URL"
+      #     wget $ARCHIVE_URL
+          
       #     # Estrai i file
       #     tar xvfz ${FOP_NAME}-bin.tar.gz
       #     # Rinomina e imposta FOP_HOME per gli step successivi
       #     mv ${FOP_NAME} fop
       #     echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
+      # # - name: Download Apache FOP
+      # #   run: |
+      # #     FOP_VERSION="2.18"
+      # #     FOP_NAME="apache-fop-${FOP_VERSION}"
+      # #     # Scarica l'archivio .tar.gz
+      # #     wget https://dlcdn.apache.org/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz
+      # #     # Estrai i file
+      # #     tar xvfz ${FOP_NAME}-bin.tar.gz
+      # #     # Rinomina e imposta FOP_HOME per gli step successivi
+      # #     mv ${FOP_NAME} fop
+      # #     echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
 
-      # 4. Esecuzione di FOP (Generazione del PDF)
-      - name: Generate CV PDF
-        run: |
-          mkdir -p artifact # Crea la cartella temporanea
-          FOP_JAR="${FOP_HOME}/fop.jar"
+      # # 4. Esecuzione di FOP (Generazione del PDF)
+      # - name: Generate CV PDF
+      #   run: |
+      #     mkdir -p artifact # Crea la cartella temporanea
+      #     FOP_JAR="${FOP_HOME}/fop.jar"
           
-          # Comando FOP: prende XML e XSLT per generare il PDF
-          java -jar $FOP_JAR -xml dummy.xml -xsl onepagecv.xsl -pdf ./david_marabottini_expanded/it/Curriculum_Vitae.pdf
-        shell: bash
+      #     # Comando FOP: prende XML e XSLT per generare il PDF
+      #     java -jar $FOP_JAR -xml dummy.xml -xsl onepagecv.xsl -pdf ./david_marabottini_expanded/it/Curriculum_Vitae.pdf
+      #   shell: bash
+      #   env:
+      #     FOP_HOME: ${{ env.FOP_HOME }}
+
+      name: CV PDF Generation and External Push
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  generate_cv:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout: Clona il repository principale
+      - name: Checkout Source Repo
+        uses: actions/checkout@v4
+
+      # *** NUOVA SOLUZIONE: USARE L'AZIONE DOCKER PER FOP ***
+      - name: Generate CV PDF using FOP Docker
+        uses: xresloader/action-fop@v1
+        with:
+          # Questo comando è quello che era nello Step 4, ma ora è eseguito all'interno del container Docker
+          fop_command: '-xml dummy.xml -xsl onepagecv.xsl -pdf artifact/Curriculum_Vitae.pdf'
+          # Crea la cartella temporanea che useremo per il push
+          fop_args: '--create-paths'
+          
+      # 5. Push al repository di destinazione (RIMANE INVARIATO)
+      - name: Push CV PDF to External Repository
+        uses: dmnemec/copy_file_to_another_repo_action@main 
         env:
-          FOP_HOME: ${{ env.FOP_HOME }}
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }} 
+        with:
+          # Il file generato è in artifact/
+          source_file: 'artifact/Curriculum_Vitae.pdf' 
+          destination_repo: 'davidmarabottini/pvt_github_1' 
+          destination_folder: 'CV_Artifacts/'
+          commit_message: 'Auto-generated CV PDF from FOP, commit ${{ github.sha }}'
 
       # 5. Push al repository di destinazione
       - name: Push CV PDF to External Repository
