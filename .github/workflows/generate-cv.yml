@@ -9,48 +9,35 @@ jobs:
   generate_cv:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout repository principale
       - name: Checkout Source Repo
         uses: actions/checkout@v4
 
-      # 2. Setup Java 17
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 3. Scarica e installa Apache FOP binario
       - name: Download Apache FOP Binary
         run: |
           FOP_VERSION="2.9"
-          ARCHIVE_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-${FOP_VERSION}-bin.tar.gz"
-
-          echo "Downloading FOP from $ARCHIVE_URL"
-          wget $ARCHIVE_URL
-          tar xvfz fop-${FOP_VERSION}-bin.tar.gz
+          wget https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-${FOP_VERSION}-bin.tar.gz
+          tar xvf fop-${FOP_VERSION}-bin.tar.gz
           mv fop-${FOP_VERSION} fop
+          echo "FOP_HOME=$(pwd)/fop/fop" >> $GITHUB_ENV   # NOTA: punta direttamente allo script interno
 
-          # Imposta FOP_HOME per gli step successivi
-          echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
-
-      # 4. Debug della struttura FOP
       - name: Debug FOP structure
         run: |
           echo "FOP_HOME = $FOP_HOME"
           ls -l $FOP_HOME
-          ls -l $FOP_HOME/fop
-          ls -l $FOP_HOME/fop/lib
+          ls -l $FOP_HOME/lib
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
 
-      # 5. Genera il PDF con FOP
       - name: Generate CV PDF
         run: |
-          chmod +x $FOP_HOME/fop/fop
-
-          # Esegui lo script FOP
-          $FOP_HOME/fop/fop \
+          chmod +x $FOP_HOME
+          $FOP_HOME \
             -c ${GITHUB_WORKSPACE}/fop.xconf \
             -xml ${GITHUB_WORKSPACE}/dummy.xml \
             -xsl ${GITHUB_WORKSPACE}/onepagecv.xsl \
@@ -61,7 +48,6 @@ jobs:
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
 
-      # 6. Copia e push del PDF generato su repository esterno
       - name: Push CV PDF to External Repository
         uses: dmnemec/copy_file_to_another_repo_action@main 
         env:
