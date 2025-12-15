@@ -32,7 +32,7 @@ jobs:
           wget $ARCHIVE_URL
           
           # Estrai i file
-          tar xvfz ${FOP_NAME}-bin.tar.gz
+          tar xvf ${FOP_NAME}-bin.tar.gz
           # Rinomina e imposta FOP_HOME per gli step successivi
           mv ${FOP_NAME} fop
           echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
