@@ -40,21 +40,17 @@ jobs:
       # 4. Esecuzione di FOP (Generazione del PDF)
       - name: Generate CV PDF
         run: |
-          mkdir -p artifact
+          mkdir -p artifact # Crea la cartella temporanea
           
-          # *** CORREZIONE: Includi fop.jar nel Classpath (-cp) e rimuovi org.apache.fop.cli.Main ***
-          # NOTA: Quando includi il JAR principale nel classpath, usi fop.cli.Main.
-          # Quando usi l'opzione -jar, non usi -cp. Stiamo combinando i due approcci.
-          
-          # Nuovo Classpath: fop.jar DEVE essere incluso con le librerie.
-          FOP_CLASSPATH="$FOP_HOME/build/fop.jar:$FOP_HOME/lib/*"
-
-          java -cp "$FOP_HOME/fop.jar:$FOP_HOME/lib/*" org.apache.fop.cli.Main \
+          # *** NUOVO COMANDO: Esegui lo script FOP (che gestisce il classpath internamente) ***
+          ${FOP_HOME}/fop \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf artifact/Curriculum_Vitae.pdf \
             -param lang it \
             -param root_folder david_marabottini_expanded
+            
+          # NOTA: Assicurati di aver corretto l'output in artifact/Curriculum_Vitae.pdf
         shell: bash
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
