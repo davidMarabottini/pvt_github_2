@@ -46,9 +46,8 @@ jobs:
         shell: bash
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
-
       - name: Push CV PDF to External Repository
-        uses: dmnemec/copy_file_to_another_repo_action@main 
+        uses: dmnemec/copy_file_to_another_repo_action@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
@@ -56,3 +55,6 @@ jobs:
           destination_repo: 'davidmarabottini/pvt_github_1'
           destination_folder: 'CV_Artifacts/'
           commit_message: 'Auto-generated CV PDF from FOP, commit ${{ github.sha }}'
+          user_name: 'GitHub Actions Bot'
+          user_email: 'actions@github.com'
+
