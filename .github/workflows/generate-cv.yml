@@ -36,12 +36,12 @@ jobs:
           # Rinomina e imposta FOP_HOME per gli step successivi
           mv ${FOP_NAME} fop
           echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
-          ls -r $(pwd)/fop
+          ls $(pwd)/fop
 
       # 4. Esecuzione di FOP (Generazione del PDF)
       - name: Debug FOP installation
         run: |
-          echo "FOP_HOME = $FOP_HOME"
+          echo "FOP_HOME = $(pwd)"
           ls -l $FOP_HOME/lib
           ls -l $FOP_HOME/fop
           
