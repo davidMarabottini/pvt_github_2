@@ -28,16 +28,15 @@ jobs:
       - name: Debug FOP structure
         run: |
           ls -l $(pwd)/fop/fop
-          echo "FOP_HOME = $FOP_HOME"
-          ls -l $FOP_HOME
-          ls -l $FOP_HOME/lib
+          ls -l $(pwd)/fop/fop
+          ls -l $(pwd)/fop/fop
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
 
       - name: Generate CV PDF
         run: |
-          chmod +x $FOP_HOME
-          $FOP_HOME \
+          chmod +x $(pwd)/fop/fop
+          $(pwd)/fop/fop \
             -c ${GITHUB_WORKSPACE}/fop.xconf \
             -xml ${GITHUB_WORKSPACE}/dummy.xml \
             -xsl ${GITHUB_WORKSPACE}/onepagecv.xsl \
