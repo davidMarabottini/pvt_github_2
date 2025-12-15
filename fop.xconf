@@ -1,0 +1,14 @@
+<fop version="1.0">
+  <renderers>
+    <renderer mime="application/pdf">
+      <fonts>
+        <font embed-url="./assets/fonts/fa-regular-400.ttf" embedding-mode="subset">
+          <font-triplet name="FontAwesome" style="normal" weight="normal"/>
+        </font>
+        <font embed-url="./assets/fonts/fa-solid-900.ttf" embedding-mode="subset">
+          <font-triplet name="FontAwesome" style="normal" weight="bold"/>
+        </font>
+      </fonts>
+    </renderer>
+  </renderers>
+</fop>
