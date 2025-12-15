@@ -27,7 +27,7 @@ jobs:
           echo "FOP_HOME=$(pwd)/fop/fop/fop" >> $GITHUB_ENV   # NOTA: punta direttamente allo script interno
       - name: Debug FOP structure
         run: |
-          ls $(pwd)/fop/fop/fop
+          ls $(pwd)/fop
           echo "FOP_HOME = $FOP_HOME"
           ls -l $FOP_HOME
           ls -l $FOP_HOME/lib
