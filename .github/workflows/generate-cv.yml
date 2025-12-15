@@ -21,7 +21,6 @@ jobs:
           java-version: '17'
 
       # 3. Scarica Apache FOP
-      # 3. Scarica Apache FOP
       - name: Download Apache FOP from Archive
         run: |
           FOP_VERSION="2.9"
@@ -37,38 +36,17 @@ jobs:
           # Rinomina e imposta FOP_HOME per gli step successivi
           mv ${FOP_NAME} fop
           echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
-      # - name: Download Apache FOP
-      #   run: |
-      #     FOP_VERSION="2.18"
-      #     FOP_NAME="apache-fop-${FOP_VERSION}"
-      #     # Scarica l'archivio .tar.gz
-      #     wget https://dlcdn.apache.org/xmlgraphics/fop/binaries/${FOP_NAME}-bin.tar.gz
-      #     # Estrai i file
-      #     tar xvfz ${FOP_NAME}-bin.tar.gz
-      #     # Rinomina e imposta FOP_HOME per gli step successivi
-      #     mv ${FOP_NAME} fop
-      #     echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
 
       # 4. Esecuzione di FOP (Generazione del PDF)
       - name: Generate CV PDF
         run: |
           mkdir -p artifact
 
-          $FOP_HOME/fop \
+          $FOP_HOME/fop/fop \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf artifact/Curriculum_Vitae.pdf
-      # - name: Generate CV PDF
-      #   run: |
-      #     mkdir -p artifact # Crea la cartella temporanea
-      #     FOP_JAR="${FOP_HOME}/fop.jar"
-          
-      #     # Comando FOP: prende XML e XSLT per generare il PDF
-      #     java -jar $FOP_JAR -xml dummy.xml -xsl onepagecv.xsl -pdf ./david_marabottini_expanded/it/Curriculum_Vitae.pdf
-      #   shell: bash
-      #   env:
-      #     FOP_HOME: ${{ env.FOP_HOME }}
-
+            
       # 5. Push al repository di destinazione
       - name: Push CV PDF to External Repository
         uses: dmnemec/copy_file_to_another_repo_action@main 
