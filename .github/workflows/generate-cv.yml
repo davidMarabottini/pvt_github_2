@@ -56,7 +56,8 @@ jobs:
           FOP_JAR="${FOP_HOME}/fop.jar"
           
           # Comando FOP: prende XML e XSLT per generare il PDF
-          java -jar $FOP_JAR -xml dummy.xml -xsl onepagecv.xsl -pdf ./david_marabottini_expanded/it/Curriculum_Vitae.pdf
+          # java -jar
+          $FOP_JAR -xml dummy.xml -xsl onepagecv.xsl -pdf ./david_marabottini_expanded/it/Curriculum_Vitae.pdf
         shell: bash
         env:
           FOP_HOME: ${{ env.FOP_HOME }}
