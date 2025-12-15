@@ -38,6 +38,12 @@ jobs:
           echo "FOP_HOME=$(pwd)/fop" >> $GITHUB_ENV
 
       # 4. Esecuzione di FOP (Generazione del PDF)
+      - name: Debug FOP installation
+        run: |
+          echo "FOP_HOME = $FOP_HOME"
+          ls -l $FOP_HOME/lib
+          ls -l $FOP_HOME/fop
+          
       - name: Generate CV PDF
         run: |
           chmod +x ${FOP_HOME}/fop/fop
@@ -49,6 +55,7 @@ jobs:
             -pdf ${GITHUB_WORKSPACE}/david_marabottini_expanded/it/cv_david_one_page.pdf \
             -param lang it \
             -param root_folder david_marabottini_expanded
+
         shell: bash
 
 
