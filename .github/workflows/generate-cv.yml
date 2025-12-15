@@ -41,17 +41,14 @@ jobs:
       - name: Generate CV PDF
         run: |
           mkdir -p artifact
-          chmod +x $FOP_HOME/fop/fop
 
-          $FOP_HOME/fop/fop \
+          java -cp "$FOP_HOME/lib/*" org.apache.fop.cli.Main \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf artifact/Curriculum_Vitae.pdf \
-            -param lang "it" \
-            -param root_folder "david_marabottini_expanded" \
-
-
-            
+            -param lang it \
+            -param root_folder david_marabottini_expanded
+ 
       # 5. Push al repository di destinazione
       - name: Push CV PDF to External Repository
         uses: dmnemec/copy_file_to_another_repo_action@main 
