@@ -1,0 +1,36 @@
+name: Self Commit Test
+
+# Il workflow si attiva a ogni push sul branch main
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Permette di avviare il workflow manualmente dalla UI di GitHub
+
+jobs:
+  commit_to_self:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout: Clona il repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        # Il parametro 'fetch-depth: 0' è necessario se devi fare un 'git pull' o operazioni di cronologia
+        with:
+          fetch-depth: 0 
+          
+      # 2. Creazione di un file di prova
+      - name: Create Test File
+        run: |
+          DATE=$(date +%Y-%m-%d_%H-%M-%S)
+          echo "Hello World from GitHub Actions at $DATE" > automatic_log.txt
+          echo "File created successfully."
+
+      # 3. Commit e Push automatico
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # Il file da aggiungere al commit
+          commit_message: "Automated: Added/Updated automatic_log.txt"
+          file_pattern: 'automatic_log.txt'
+          # Usa il token integrato, abilitato nel Passo 1
+          commit_user_name: 'github-actions[bot]'
+          commit_user_email: 'github-actions[bot]@users.noreply.github.com' 
