@@ -42,10 +42,11 @@ jobs:
         run: |
           mkdir -p artifact
 
-          $FOP_HOME/fop/fop \
+          $FOP_HOME/fop \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf artifact/Curriculum_Vitae.pdf
+
             
       # 5. Push al repository di destinazione
       - name: Push CV PDF to External Repository
