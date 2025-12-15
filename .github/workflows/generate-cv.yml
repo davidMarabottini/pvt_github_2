@@ -44,6 +44,7 @@ jobs:
           
           # *** NUOVO COMANDO: Esegui lo script FOP (che gestisce il classpath internamente) ***
           ${FOP_HOME}/fop \
+            -c fop.xconf \
             -xml dummy.xml \
             -xsl onepagecv.xsl \
             -pdf ./david_marabottini_expanded/it/cv_david_one_page.pdf \
